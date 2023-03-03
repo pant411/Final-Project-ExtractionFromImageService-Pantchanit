@@ -7,14 +7,15 @@ from ExtractionModule import findShopName,\
                              findCustomerShop,\
                              extractAddress,\
                              findListOfItemWithQty,\
-                             findListOfItemWithoutQty\
-#                              findListOfItemWithoutQty
+                             findListOfItemWithoutQty,\
+                             findTypeQtyItem
+
 # from pythainlp.tokenize import sent_tokenize
 # import json
 from Utils import candidateFromList, normalizeDate
 import re
 
-def extraction(text: str, option: int):
+def extraction(text: str):
     Lines = text.splitlines()
 
     item_txt1 = []
@@ -70,12 +71,10 @@ def extraction(text: str, option: int):
     
     listOfItem = []
 
-    if option == 0:
-        listOfItem = findListOfItemWithoutQty(lsttext = item_txt2)
-    elif option == 1:
+    if findTypeQtyItem(lsttext = item_txt2, threshold = 0.75):
         listOfItem = findListOfItemWithQty(lsttext = item_txt2)
-
-    # listListOfItem = findListOfItem(lsttext = item_txt2, threshold = 0.80)
+    else:
+        listOfItem = findListOfItemWithoutQty(lsttext = item_txt2)
 
     receiptID = ''
     if len(listReceiptID) != 0:

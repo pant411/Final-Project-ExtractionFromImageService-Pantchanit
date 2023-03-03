@@ -370,12 +370,42 @@ def extractAddress(lsttext: List,
       "line-addr-customer": line_addr_2
   }
 
-def findListOfItem(lsttext: List, threshold: float = 0.75):
+def findTypeQtyItem(lsttext: List, threshold: float = 0.75):
+  keywords = ["จำนวน", "จำนวน/คัน", "จำนวน/หน่วย" "ปริมาณ", "Quantity", "Qty"]
+  except_keywords = ["จำนวนเงินทั้งหมด", "จำนวนเงิน", "จำนวนเงินรวมภาษีมูลค่าเพิ่ม"]
+  except_pattern =  r"((([1-9]\d{0,2})(,?\d{3})+)[.\,]\d\d?)|(([1-9]\d{0,2})[.\,]\d\d?)"
+  listHeaderItem = []
+  len_lsttext = len(lsttext)
+  keep_able = False
+  for idx in range(len_lsttext):
+    token_txt = sent_tokenize(lsttext[idx]['txt'], engine='whitespace')
+    isexcept = re.search(except_pattern,lsttext[idx]['txt'])
+    if isexcept and not(keep_able): continue
+    if not(keep_able):
+      for ele in token_txt:
+        max_res_sim, _ = ut.similarityListWord(ele,keywords)
+        max_res_ex, _ = ut.similarityListWord(ele,except_keywords)
+        if max_res_ex >= threshold:
+          # keep_able = True
+          break        
+        if max_res_sim >= threshold and not(keep_able):
+          listHeaderItem.append(ele)
+          keep_able = True
+          break
+    if keep_able:
+      #  listAddressItem.append(lsttext[idx]['txt'])
+      break
+  # print(listHeaderItem)
+  if len(listHeaderItem) > 0:
+    return True
+  return False 
+
+def findHeader(lsttext: List, threshold: float = 0.75):
   keywords = ["รายการ", "รายการสินค้า", "รายการที่ชำระ",\
     "รายการรับเงิน", "ราคาต่อหน่วย", "ราคา", "ลำดับที่",\
     "ชื่อสินค้า", "รายละเอียด", "ส่วนลด", "DESCRIPTION",\
-    "Price", "Quaniily", "Unit Price", "Amount", "order"]
-  listAddressItem = []
+    "Price", "Quantity", "Unit Price", "Amount", "order"]
+  listHeader = []
   len_lsttext = len(lsttext)
   keep_able = False
   for idx in range(len_lsttext):
@@ -384,29 +414,13 @@ def findListOfItem(lsttext: List, threshold: float = 0.75):
       for ele in token_txt:
         max_res_sim, _ = ut.similarityListWord(ele,keywords)
         if max_res_sim >= threshold and not(keep_able):
-          listAddressItem.append(lsttext[idx]['txt'])
+          listHeader.append(lsttext[idx]['txt'])
           keep_able = True
           break
     else:
-      #  listAddressItem.append(lsttext[idx]['txt'])
+      #  listHeader.append(lsttext[idx]['txt'])
       break
-  return listAddressItem 
-
-"""
-def analyzeItem(item: str,dict_data: Dict):
-  token_txt = sent_tokenize(item, engine='whitespace')
-  len_token_txt = len(token_txt)
-  pos_unit_item = -1
-  for idx in range(len_token_txt-1,-1,-1):
-    max_match, m = process.extractOne(token_txt[idx], dict_data['unit-code-item'])
-    if m > 95: 
-      print(max_match, m)
-      pos_unit_item = idx
-      break
-  # print(token_txt)
-  if pos_unit_item != -1: 
-    print(pos_unit_item, token_txt[pos_unit_item-1])
-"""
+  return listHeader 
 
 def findTotal(txt: str):
   max_match = 0
