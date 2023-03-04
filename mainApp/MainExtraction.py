@@ -70,10 +70,12 @@ def extraction(text: str):
                 )
     
     listOfItem = []
-
+    type_item = 0
     if findTypeQtyItem(lsttext = item_txt2, threshold = 0.75):
+        type_item = 1
         listOfItem = findListOfItemWithQty(lsttext = item_txt2)
     else:
+        type_item = 0
         listOfItem = findListOfItemWithoutQty(lsttext = item_txt2)
 
     receiptID = ''
@@ -114,5 +116,6 @@ def extraction(text: str):
              'taxIDCust': taxIDCust,
              'addressShop': listAddress["addressShop"],
              'addressCust': listAddress["addressCust"],
-             'items': listOfItem
+             'items': listOfItem,
+             'type_item': type_item
         }

@@ -1,1 +1,1 @@
-uvicorn app:app --reload --host 0.0.0.0 --port 8081
+uvicorn app:app --workers 8 --host 0.0.0.0 --port 8081
