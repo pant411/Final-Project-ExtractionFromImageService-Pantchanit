@@ -8,7 +8,8 @@ from ExtractionModule import findShopName,\
                              extractAddress,\
                              findListOfItemWithQty,\
                              findListOfItemWithoutQty,\
-                             findTypeQtyItem
+                             findTypeQtyItem, \
+                             findTypeReceipt
 
 # from pythainlp.tokenize import sent_tokenize
 # import json
@@ -68,6 +69,8 @@ def extraction(text: str):
                     line_end = listAddress["line-addr-customer"], 
                     threshold = 0.72
                 )
+
+    type_receipt = findTypeReceipt(item_txt1)
     
     listOfItem = []
     type_item = 0
@@ -107,6 +110,7 @@ def extraction(text: str):
     if len(listCustomerShop) != 0:
         customerName = listCustomerShop[0]
 
+
     return { 'shopName': shopName, 
              'shopPhone': shopPhone, 
              'taxIDShop': taxIDShop, 
@@ -117,5 +121,6 @@ def extraction(text: str):
              'addressShop': listAddress["addressShop"],
              'addressCust': listAddress["addressCust"],
              'items': listOfItem,
-             'type_item': type_item
+             'type_item': type_item,
+             'type_receipt': type_receipt 
         }

@@ -395,7 +395,7 @@ def findTypeQtyItem(lsttext: List, threshold: float = 0.75):
     if keep_able:
       #  listAddressItem.append(lsttext[idx]['txt'])
       break
-  # print(listHeaderItem)
+  print(listHeaderItem)
   if len(listHeaderItem) > 0:
     return True
   return False 
@@ -549,3 +549,41 @@ def findListOfItemWithoutQty(lsttext: List) -> List:
       # else:
       #   print(f"total is {price_item}")
   return listOfItem
+
+def findTypeReceipt(lsttext: List):
+  res = -1
+  type_receipt_keyword = ["ใบเสร็จรับเงิน", "receipt", 
+                          "ใบเสนอราคา", "quotation", 
+                          "ใบแจ้งหนี้", "ใบส่งของ", 
+                          "ใบส่งสินค้า" ]
+  
+  type_receipt = {
+    "ใบเสร็จรับเงิน": 0,
+    "receipt": 0,
+    "ใบเสนอราคา": 1,
+    "quotation": 1,
+    "ใบแจ้งหนี้": 2,
+    "ใบส่งของ": 3,
+    "ใบส่งสินค้า": 4
+  }
+  
+  len_lsttext = len(lsttext)
+  isBreak = False
+  for idx in range(len_lsttext):
+    """token_txt = sent_tokenize(
+                  lsttext[idx]['txt'], 
+                  engine='whitespace'
+                )"""
+    token_txt = re.split('/| ', lsttext[idx]['txt'])
+    for ele in token_txt:
+      if isBreak: break
+      max_res_sim, _ = ut.similarityListWord(
+                          ele,
+                          type_receipt_keyword
+                      )
+      if max_res_sim >= 0.75:
+        res = type_receipt[type_receipt_keyword[_]]
+        isBreak = True
+        break
+  
+  return res
