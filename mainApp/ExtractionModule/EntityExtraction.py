@@ -555,7 +555,7 @@ def findTypeReceipt(lsttext: List):
   type_receipt_keyword = ["ใบเสร็จรับเงิน", "receipt", 
                           "ใบเสนอราคา", "quotation", 
                           "ใบแจ้งหนี้", "ใบส่งของ", 
-                          "ใบส่งสินค้า" ]
+                          "ใบส่งสินค้า", "ใบกำกับภาษี" ]
   
   type_receipt = {
     "ใบเสร็จรับเงิน": 0,
@@ -564,11 +564,12 @@ def findTypeReceipt(lsttext: List):
     "quotation": 1,
     "ใบแจ้งหนี้": 2,
     "ใบส่งของ": 3,
-    "ใบส่งสินค้า": 4
+    "ใบส่งสินค้า": 4,
+    "ใบกำกับภาษี": 5
   }
   
   len_lsttext = len(lsttext)
-  isBreak = False
+  confidence = 0
   for idx in range(len_lsttext):
     """token_txt = sent_tokenize(
                   lsttext[idx]['txt'], 
@@ -576,14 +577,14 @@ def findTypeReceipt(lsttext: List):
                 )"""
     token_txt = re.split('/| ', lsttext[idx]['txt'])
     for ele in token_txt:
-      if isBreak: break
+      # if isBreak: break
       max_res_sim, _ = ut.similarityListWord(
                           ele,
                           type_receipt_keyword
                       )
       if max_res_sim >= 0.75:
-        res = type_receipt[type_receipt_keyword[_]]
-        isBreak = True
-        break
+        if max_res_sim > confidence:
+          res = type_receipt[type_receipt_keyword[_]]
+          confidence = max_res_sim
   
   return res
