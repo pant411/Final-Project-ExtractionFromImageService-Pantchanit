@@ -371,7 +371,7 @@ def extractAddress(lsttext: List,
   }
 
 def findTypeQtyItem(lsttext: List, threshold: float = 0.75):
-  keywords = ["จำนวน", "จำนวน/คัน", "จำนวน/หน่วย" "ปริมาณ", "Quantity", "Qty"]
+  keywords = ["จำนวน", "จำนวน/คัน", "จำนวน/หน่วย" "ปริมาณ", "Quantity", "Qty", "หน่วย"]
   except_keywords = ["จำนวนเงินทั้งหมด", "จำนวนเงิน", "จำนวนเงินรวมภาษีมูลค่าเพิ่ม"]
   except_pattern =  r"((([1-9]\d{0,2})(,?\d{3})+)[.\,]\d\d?)|(([1-9]\d{0,2})[.\,]\d\d?)"
   listHeaderItem = []
@@ -428,7 +428,8 @@ def findTotal(txt: str):
   except_word = ["จำนวนเงินทั้งหมด", "จำนวนเงินเป็นตัวอักษร",\
     "รวมทั้งหมด", "total", "ยอดชำระรวม", "จำนวนเงินรวมภาษีมูลค่าเพิ่ม",\
     "ภาษีมูลค่าเพิ่ม", "ยอดคงค้าง", "รวมหน้านี้", "รับชำระโดย", "รวมเงิน",\
-    "รวมราคาทั้งสิ้น", "TOTAL", "AMOUNT", "จำนวนเงินรวมทังสิน", "ราคาสุทธิ"]
+    "รวมราคาทั้งสิ้น", "TOTAL", "AMOUNT", "จำนวนเงินรวมทังสิน", "ราคาสุทธิ",
+    "รวมจำนวนเงิน", "จำนวนเงินรวมทั้งสิ้น"]
   for ele_token in token_txt:
     max_res_sim, _ = ut.similarityListWord(ele_token,except_word)
     if max_res_sim > max_match:

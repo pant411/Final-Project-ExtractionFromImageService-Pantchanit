@@ -74,7 +74,7 @@ def extraction(text: str):
     
     listOfItem = []
     type_item = 0
-    if findTypeQtyItem(lsttext = item_txt2, threshold = 0.75):
+    if findTypeQtyItem(lsttext = item_txt2, threshold = 0.72):
         type_item = 1
         listOfItem = findListOfItemWithQty(lsttext = item_txt2)
     else:

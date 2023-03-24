@@ -7,7 +7,7 @@ import numpy as np
 # my module
 from mainModule import runMain # main application of project
 
-
+import pytesseract 
 
 app = FastAPI(title="Extract text from receipt service!!!!!", debug=True)
 
@@ -25,6 +25,10 @@ app.add_middleware(
 def home():
     return "Extract text from receipt service!!!!!"
 
+@app.get("/tesseractversion")
+def tesseractVersion():
+    return pytesseract.get_tesseract_version()
+
 @app.post("/receipts/uploadfile/submitreceipt", tags = ["Receipts"])
 async def submitReceipt1(file: UploadFile = File(...)):
     content_receipt = file.file.read()
@@ -40,3 +44,5 @@ async def submitReceipt2(file: bytes = File(...)):
             cv2.IMREAD_UNCHANGED)      
     data = runMain(image)
     return data
+
+
