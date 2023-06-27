@@ -7,4 +7,4 @@
 2. ติดตั้ง python3 (แนะนำให้เป็น version 3.8)
 3. รันคำสั่ง pip install -r library_list.txt
 4. รันคำสั่ง uvicorn app:app --workers 8 --host 0.0.0.0 --port 8081
-5. ทดสอบการใช้ด้วย localhost:8081/docs (ใช้ใน browser)
+5. ทดสอบการใช้งานด้วย localhost:8081/docs (ใช้ใน browser)
